@@ -2,12 +2,29 @@ FROM alpine:3.6
 
 ENV HASS_VERSION 0.57.3
 
-RUN apk add -U --no-cache python3 py3-pip python3-dev tzdata 
-    pip3 install --upgrade virtualenv && \
-    python3 -m venv $HOME/homeassistant && \
-    source $HOME/homeassistant/bin/activate && \
-    pip3 install --upgrade homeassistant==${HASS_VERSION}
-    
+RUN set -xe && \
+    apk add -U --no-cache tzdata python3 && \
+    apk add -U --no-cache --virtual .build-dependencies  \
+      py3-pip \
+      curl \
+      musl-dev \
+      build-base \
+      py3-cffi \
+      openssl-dev \
+      python3-dev \
+      linux-headers \
+      libxml2-dev \
+      libxslt-dev \
+      cython \
+      eudev-dev \
+      jpeg-dev && \
+    curl -o /tmp/requirements_all.txt https://raw.githubusercontent.com/home-assistant/home-assistant/${HASS_VERSION}/requirements_all.txt && \
+    pip3 install --no-cache-dir -r /tmp/requirements_all.txt && \
+    pip3 install --upgrade homeassistant==${HASS_VERSION} && \
+    rm -rf /tmp/* && apk del .build-dependencies
+
 EXPOSE 8123
- 
-CMD source $HOME/homeassistant/bin/activate && $HOME/homeassistant/bin/hass
+
+VOLUME /config
+
+CMD hass --config /config
