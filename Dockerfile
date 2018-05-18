@@ -1,6 +1,6 @@
 FROM alpine:3.6
 
-ENV HASS_VERSION 0.57.3
+ENV HASS_VERSION 0.69.1
 
 RUN set -xe && \
     apk add -U --no-cache tzdata python3 && \
