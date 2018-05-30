@@ -27,4 +27,7 @@ EXPOSE 8123
 
 VOLUME /config
 
+LABEL url=https://github.com/home-assistant/home-assistant
+LABEL version=${HASS_VERSION}
+
 CMD hass --config /config
