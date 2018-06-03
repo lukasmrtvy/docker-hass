@@ -6,6 +6,7 @@ RUN set -xe && \
     apk add -U --no-cache tzdata python3 && \
     apk add -U --no-cache --virtual .build-dependencies  \
       py3-pip \
+      autoconf \
       curl \
       musl-dev \
       build-base \
